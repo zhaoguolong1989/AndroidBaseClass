@@ -11,8 +11,8 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.base.R;
 import com.github.androidtools.PhoneUtils;
+import com.github.baseclass.R;
 import com.github.customview.MyButton;
 
 

@@ -3,8 +3,8 @@ package com.github.baseclass.view.pickerview.pic;
 import android.content.Context;
 import android.view.View;
 
-import com.base.R;
-import com.base.view.pickerview.TimePopupWindow;
+import com.github.baseclass.R;
+import com.github.baseclass.view.pickerview.TimePopupWindow;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -12,8 +12,8 @@ import java.util.Arrays;
 import java.util.List;
 
 /*
-import com.base.R;
-import com.base.view.pickerview.TimePopupWindow;*/
+import com.github.baseclass.R;
+import com.github.baseclass.view.pickerview.TimePopupWindow;*/
 
 public class WheelTime {
     public static DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");

@@ -39,7 +39,7 @@ import android.view.View;
 import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
-import com.base.R;
+import com.github.baseclass.R;
 
 import java.util.LinkedList;
 import java.util.List;

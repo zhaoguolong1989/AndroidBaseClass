@@ -2,7 +2,7 @@ package com.github.baseclass.view.pickerview.pic;
 
 import android.view.View;
 
-import com.base.R;
+import com.github.baseclass.R;
 
 import java.util.ArrayList;
 

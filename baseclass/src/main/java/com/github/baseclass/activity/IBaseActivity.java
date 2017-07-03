@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.base.adapter.BaseRecyclerAdapter;
-import com.base.adapter.CommonAdapter;
-import com.base.view.Loading;
-import com.base.view.MyDialog;
-import com.base.view.MyPopupwindow;
+import com.github.baseclass.adapter.BaseRecyclerAdapter;
+import com.github.baseclass.adapter.CommonAdapter;
+import com.github.baseclass.view.Loading;
+import com.github.baseclass.view.MyDialog;
+import com.github.baseclass.view.MyPopupwindow;
 import com.github.androidtools.ToastUtils;
 import com.github.androidtools.rx.IOCallBack;
 import com.github.androidtools.rx.MySubscriber;

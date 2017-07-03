@@ -10,7 +10,7 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.base.R;
+import com.github.baseclass.R;
 
 
 /**

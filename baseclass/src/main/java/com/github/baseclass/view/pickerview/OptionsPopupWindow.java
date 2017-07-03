@@ -10,9 +10,9 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.base.R;
-import com.base.view.pickerview.pic.ScreenInfo;
-import com.base.view.pickerview.pic.WheelOptions;
+import com.github.baseclass.R;
+import com.github.baseclass.view.pickerview.pic.ScreenInfo;
+import com.github.baseclass.view.pickerview.pic.WheelOptions;
 
 import java.util.ArrayList;
 
