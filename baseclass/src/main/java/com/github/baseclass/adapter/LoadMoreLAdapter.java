@@ -1,23 +1,21 @@
 package com.github.baseclass.adapter;
 
 import android.content.Context;
-import android.os.Handler;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2017/6/30.
- */
-
-public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreViewHolder> {
-    Handler handler;
+public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
+    private BottomView bottomView;
     /*正常view item*/
     private final int normal_view = 2000;
     /*显示加载更多*/
@@ -37,92 +35,112 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     /*** 是否隐藏暂无内容的提示*/
     private boolean isHiddenPromptView = false;
     private View loadView,errorView,noMoreView;
-    private String loadViewText,errorViewText,noMoreViewText;
+    private String loadViewText="正在加载更多...";
+    private String noMoreViewText="暂无更多内容";
+    private String errorViewText="加载失败,点击重试";
 
     protected List<T> mList;
     protected Context mContext;
     protected LayoutInflater mInflater;
-    private OnItemClickListener mClickListener;
-    private OnItemLongClickListener mLongClickListener;
+    protected final int mItemLayoutId;
 
-    public LoadMoreAdapter(Context mContext,int pageSize) {
-        this.mContext = mContext;
-        mInflater=LayoutInflater.from(mContext);
+    public LoadMoreLAdapter(Context context, int itemLayoutId,int pageSize) {
+        this.mContext = context;
+        this.mInflater = LayoutInflater.from(mContext);
+        this.mItemLayoutId = itemLayoutId;
         this.pageSize=pageSize;
     }
-
-    abstract public int getItemLayoutId(int viewType);
-
-    abstract public void bindData(LoadMoreViewHolder holder, int position, T item);
-
-    @Override
-    public LoadMoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        final LoadMoreViewHolder holder;
-        if (viewType == normal_view) {//正常item view  viewType == normal_view
-            holder= new LoadMoreViewHolder(mContext,
-                    mInflater.inflate(getItemLayoutId(viewType), parent, false));
-            if (mClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mClickListener.onItemClick(holder.itemView, holder.getLayoutPosition());
-                    }
-                });
-            }
-            if (mLongClickListener != null) {
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        mLongClickListener.onItemLongClick(holder.itemView, holder.getLayoutPosition());
-                        return true;
-                    }
-                });
-            }
-        } else {
-            holder =new LoadMoreViewHolder(mContext,setDefaultView(viewType));
+    public void setList(List<T> list) {
+        setList(list,false);
+    }
+    public void setList(List<T> list,boolean isNotifyData) {
+        this.mList = list;
+        if(isNotifyData){
+            notifyDataSetChanged();
         }
-        return holder;
+    }
+    public void addList(List<T> list) {
+        addList(list, false);
+    }
+    public void addList(List<T> list, boolean isNotifyData) {
+        if (list == null || list.size() == 0) {
+            hasMoreData = false;
+        } else if (list.size() < pageSize) {
+            hasMoreData = false;
+            this.mList.addAll(list);
+        }else{
+            hasMoreData = true;
+            this.mList.addAll(list);
+        }
+        if (isNotifyData) {
+            notifyDataSetChanged();
+        }
+    }
+    public List<T> getList() {
+        return mList;
     }
 
     @Override
-    public void onBindViewHolder(LoadMoreViewHolder holder, int position) {
-        if(position<=getItemCount()-2){
-            bindData(holder, position, mList.get(position));
+    public int getCount() {
+        if(onLoadMoreListener!=null){
+            return mList==null?0:mList.size()+1;
         }else{
+            return mList==null?0:mList.size();
+        }
+    }
+
+    @Override
+    public T getItem(int position) {
+        return mList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final LoadMoreLViewHolder viewHolder = getViewHolder(position, convertView,parent);
+        if(position<=getCount()-2){
+            convert(viewHolder, getItem(position));
+        }else{
+//            LoadMoreLViewHolder bottomHolder=new LoadMoreLViewHolder();
+            int itemViewType = getItemViewType(position);
             if(onLoadMoreListener!=null){
-                holder.bottomView.setOnClickListener(null);
-                switch (holder.getItemViewType()){
+//                viewHolder.bottomView=convertView.findViewById(R.i)
+                switch (getItemViewType(position)){
                     case load_more_view_type:
-                        getHandler().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                onLoadMoreListener.loadMore();
-                            }
-                        });
+                        onLoadMoreListener.loadMore();
                         break;
                     case load_error_view_type:
-                        holder.bottomView.setOnClickListener(new View.OnClickListener() {
+                        viewHolder.bottomView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 isLoadError=false;
                                 hasMoreData=true;
                                 notifyDataSetChanged();
-                                getHandler().post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        onLoadMoreListener.loadMore();
-                                    }
-                                });
+                                onLoadMoreListener.loadMore();
                             }
                         });
                         break;
                 }
             }
         }
+        return viewHolder.getConvertView();
+
     }
+
+    public abstract void convert(LoadMoreLViewHolder holder, T item);
+
+    private LoadMoreLViewHolder getViewHolder(int position, View convertView, ViewGroup parent) {
+        return LoadMoreLViewHolder.get(mContext, convertView, parent, mItemLayoutId,position);
+    }
+
     @Override
     public int getItemViewType(int position) {
-        if(mList!=null&&onLoadMoreListener!=null&&position==getItemCount()-1){
+        if(mList!=null&&onLoadMoreListener!=null&&position==getCount()-1){
             if(isLoadError){
                 return load_error_view_type;
             }else if(hasMoreData){
@@ -176,72 +194,11 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         }
         return bottomView;
     }
-    @Override
-    public int getItemCount() {
-        if(onLoadMoreListener!=null){
-            return mList==null?0:mList.size()+1;
-        }else{
-            return mList==null?0:mList.size();
-        }
-    }
-    public void setList(List<T> list) {
-        setList(list, false);
-    }
-    public void setList(List<T> list, boolean isNotifyData) {
-        if (list == null || list.size() == 0 || list.size() < pageSize) {
-            hasMoreData = false;
-        }else{
-            hasMoreData = true;
-        }
-        this.mList = list;
-        if (isNotifyData) {
-            notifyDataSetChanged();
-        }
-    }
-    public void addList(List<T> list) {
-        addList(list, false);
-    }
-    public void addList(List<T> list, boolean isNotifyData) {
-        if (list == null || list.size() == 0) {
-            hasMoreData = false;
-        } else if (list.size() < pageSize) {
-            hasMoreData = false;
-            this.mList.addAll(list);
-        }else{
-            hasMoreData = true;
-            this.mList.addAll(list);
-        }
-        if (isNotifyData) {
-            notifyDataSetChanged();
-        }
-    }
-    public List<T> getList() {
-        return mList;
-    }
-    public void setClickListener(OnItemClickListener mClickListener) {
-        this.mClickListener = mClickListener;
-    }
-    public void setLongClickListener(OnItemLongClickListener mLongClickListener) {
-        this.mLongClickListener = mLongClickListener;
-    }
-    public interface OnLoadMoreListener {
-        void loadMore();
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int pos);
-    }
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View itemView, int pos);
-    }
     public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
         this.onLoadMoreListener = onLoadMoreListener;
     }
-
-    public Handler getHandler(){
-        if(handler==null){
-            handler=new Handler();
-        }
-        return handler;
+    public interface OnLoadMoreListener {
+        void loadMore();
     }
     /*是否隐藏底部暂无内容的view*/
     public void setHiddenPromptView(boolean hiddenPromptView) {
@@ -288,5 +245,16 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     public int dip2px(Context context, float dipValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (dipValue * scale + 0.5f);
+    }
+    public class BottomView extends LinearLayout {
+        public BottomView(Context context) {
+            super(context);
+        }
+        public BottomView(Context context, @Nullable AttributeSet attrs) {
+            super(context, attrs);
+        }
+        public BottomView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+            super(context, attrs, defStyleAttr);
+        }
     }
 }

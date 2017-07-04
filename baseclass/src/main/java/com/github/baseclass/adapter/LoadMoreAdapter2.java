@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Administrator on 2017/6/30.
  */
 
-public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreViewHolder> {
+public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreViewHolder> {
     Handler handler;
     /*正常view item*/
     private final int normal_view = 2000;
@@ -27,7 +27,6 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     /*加载失败*/
     private final int load_error_view_type = 1002;
     /*回调方法,触发加载更多*/
-    private OnLoadMoreListener onLoadMoreListener;
     /***用于判断是否还有更多数据*/
     private int pageSize;
     /***是否还有更多数据,没有更多数据显示"暂无更多"*/
@@ -42,10 +41,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     protected List<T> mList;
     protected Context mContext;
     protected LayoutInflater mInflater;
-    private OnItemClickListener mClickListener;
-    private OnItemLongClickListener mLongClickListener;
 
-    public LoadMoreAdapter(Context mContext,int pageSize) {
+    public LoadMoreAdapter2(Context mContext, int pageSize) {
         this.mContext = mContext;
         mInflater=LayoutInflater.from(mContext);
         this.pageSize=pageSize;
@@ -53,7 +50,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
 
     abstract public int getItemLayoutId(int viewType);
 
-    abstract public void bindData(LoadMoreViewHolder holder, int position, T item);
+    abstract public void bindData(LoadMoreViewHolder holder, int position, T bean);
 
     @Override
     public LoadMoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,23 +58,6 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         if (viewType == normal_view) {//正常item view  viewType == normal_view
             holder= new LoadMoreViewHolder(mContext,
                     mInflater.inflate(getItemLayoutId(viewType), parent, false));
-            if (mClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mClickListener.onItemClick(holder.itemView, holder.getLayoutPosition());
-                    }
-                });
-            }
-            if (mLongClickListener != null) {
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        mLongClickListener.onItemLongClick(holder.itemView, holder.getLayoutPosition());
-                        return true;
-                    }
-                });
-            }
         } else {
             holder =new LoadMoreViewHolder(mContext,setDefaultView(viewType));
         }
@@ -90,7 +70,6 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
             bindData(holder, position, mList.get(position));
         }else{
             if(onLoadMoreListener!=null){
-                holder.bottomView.setOnClickListener(null);
                 switch (holder.getItemViewType()){
                     case load_more_view_type:
                         getHandler().post(new Runnable() {
@@ -122,19 +101,11 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     }
     @Override
     public int getItemViewType(int position) {
-        if(mList!=null&&onLoadMoreListener!=null&&position==getItemCount()-1){
-            if(isLoadError){
-                return load_error_view_type;
-            }else if(hasMoreData){
-                return load_more_view_type;
-            }else{
-                return no_more_view_type;
-            }
-        }
+
         return normal_view;
     }
     private View setDefaultView(int viewType) {
-        LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
+        /*LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
         bottomView.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
         bottomView.setGravity(Gravity.CENTER);
 
@@ -173,8 +144,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     bottomView.addView(textView);
                 }
                 break;
-        }
-        return bottomView;
+        }*/
+        return null;
     }
     @Override
     public int getItemCount() {
@@ -184,58 +155,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
             return mList==null?0:mList.size();
         }
     }
-    public void setList(List<T> list) {
-        setList(list, false);
-    }
-    public void setList(List<T> list, boolean isNotifyData) {
-        if (list == null || list.size() == 0 || list.size() < pageSize) {
-            hasMoreData = false;
-        }else{
-            hasMoreData = true;
-        }
-        this.mList = list;
-        if (isNotifyData) {
-            notifyDataSetChanged();
-        }
-    }
-    public void addList(List<T> list) {
-        addList(list, false);
-    }
-    public void addList(List<T> list, boolean isNotifyData) {
-        if (list == null || list.size() == 0) {
-            hasMoreData = false;
-        } else if (list.size() < pageSize) {
-            hasMoreData = false;
-            this.mList.addAll(list);
-        }else{
-            hasMoreData = true;
-            this.mList.addAll(list);
-        }
-        if (isNotifyData) {
-            notifyDataSetChanged();
-        }
-    }
-    public List<T> getList() {
-        return mList;
-    }
-    public void setClickListener(OnItemClickListener mClickListener) {
-        this.mClickListener = mClickListener;
-    }
-    public void setLongClickListener(OnItemLongClickListener mLongClickListener) {
-        this.mLongClickListener = mLongClickListener;
-    }
-    public interface OnLoadMoreListener {
-        void loadMore();
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View itemView, int pos);
-    }
-    public interface OnItemLongClickListener {
-        void onItemLongClick(View itemView, int pos);
-    }
-    public void setOnLoadMoreListener(OnLoadMoreListener onLoadMoreListener) {
-        this.onLoadMoreListener = onLoadMoreListener;
-    }
+
+      /////////////////////////////////////////////////////
 
     public Handler getHandler(){
         if(handler==null){
