@@ -103,11 +103,17 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final LoadMoreLViewHolder viewHolder = getViewHolder(position, convertView,parent);
+        int itemViewType = getItemViewType(position);
+        if(itemViewType==normal_view){
+
+        }else{
+
+        }
         if(position<=getCount()-2){
             convert(viewHolder, getItem(position));
         }else{
 //            LoadMoreLViewHolder bottomHolder=new LoadMoreLViewHolder();
-            int itemViewType = getItemViewType(position);
+
             if(onLoadMoreListener!=null){
 //                viewHolder.bottomView=convertView.findViewById(R.i)
                 switch (getItemViewType(position)){
