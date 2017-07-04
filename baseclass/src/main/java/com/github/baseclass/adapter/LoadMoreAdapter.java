@@ -53,7 +53,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
 
     abstract public int getItemLayoutId(int viewType);
 
-    abstract public void bindData(LoadMoreViewHolder holder, int position, T bean);
+    abstract public void bindData(LoadMoreViewHolder holder, int position, T item);
 
     @Override
     public LoadMoreViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -244,7 +244,13 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     }
     /*是否隐藏底部暂无内容的view*/
     public void setHiddenPromptView(boolean hiddenPromptView) {
+        setHiddenPromptView(hiddenPromptView,false);
+    }
+    public void setHiddenPromptView(boolean hiddenPromptView,boolean isNotifyData){
         isHiddenPromptView = hiddenPromptView;
+        if(isNotifyData){
+            notifyDataSetChanged();
+        }
     }
     /*是否加载失败*/
     public void setLoadError(boolean loadError) {
