@@ -1,3 +1,4 @@
+/*
 package com.github.baseclass.adapter;
 
 import android.content.Context;
@@ -12,28 +13,48 @@ import android.widget.TextView;
 
 import java.util.List;
 
+*/
 /**
  * Created by Administrator on 2017/6/30.
- */
+ *//*
+
 
 public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreViewHolder> {
     Handler handler;
-    /*正常view item*/
+    */
+/*正常view item*//*
+
     private final int normal_view = 2000;
-    /*显示加载更多*/
+    */
+/*显示加载更多*//*
+
     private final int load_more_view_type = 1000;
-    /*暂无更多数据*/
+    */
+/*暂无更多数据*//*
+
     private final int no_more_view_type = 1001;
-    /*加载失败*/
+    */
+/*加载失败*//*
+
     private final int load_error_view_type = 1002;
-    /*回调方法,触发加载更多*/
-    /***用于判断是否还有更多数据*/
+    */
+/*回调方法,触发加载更多*//*
+
+    */
+/***用于判断是否还有更多数据*//*
+
     private int pageSize;
-    /***是否还有更多数据,没有更多数据显示"暂无更多"*/
+    */
+/***是否还有更多数据,没有更多数据显示"暂无更多"*//*
+
     private boolean hasMoreData = false;
-    /*** 加载是否失败,用于点击重新加载*/
+    */
+/*** 加载是否失败,用于点击重新加载*//*
+
     private boolean isLoadError;
-    /*** 是否隐藏暂无内容的提示*/
+    */
+/*** 是否隐藏暂无内容的提示*//*
+
     private boolean isHiddenPromptView = false;
     private View loadView,errorView,noMoreView;
     private String loadViewText,errorViewText,noMoreViewText;
@@ -105,7 +126,8 @@ public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreV
         return normal_view;
     }
     private View setDefaultView(int viewType) {
-        /*LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
+        */
+/*LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
         bottomView.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
         bottomView.setGravity(Gravity.CENTER);
 
@@ -144,7 +166,8 @@ public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreV
                     bottomView.addView(textView);
                 }
                 break;
-        }*/
+        }*//*
+
         return null;
     }
     @Override
@@ -164,7 +187,9 @@ public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreV
         }
         return handler;
     }
-    /*是否隐藏底部暂无内容的view*/
+    */
+/*是否隐藏底部暂无内容的view*//*
+
     public void setHiddenPromptView(boolean hiddenPromptView) {
         setHiddenPromptView(hiddenPromptView,false);
     }
@@ -174,35 +199,51 @@ public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreV
             notifyDataSetChanged();
         }
     }
-    /*是否加载失败*/
+    */
+/*是否加载失败*//*
+
     public void setLoadError(boolean loadError) {
         isLoadError = loadError;
     }
-    /*是否还有更多数据*/
+    */
+/*是否还有更多数据*//*
+
     public void setHasMoreData(boolean hasMoreData) {
         this.hasMoreData = hasMoreData;
     }
-    /*设置正在加载的view*/
+    */
+/*设置正在加载的view*//*
+
     public void setLoadView(View loadView) {
         this.loadView = loadView;
     }
-    /*设置加载失败的view*/
+    */
+/*设置加载失败的view*//*
+
     public void setErrorView(View errorView) {
         this.errorView = errorView;
     }
-    /*设置没有更多数据的view*/
+    */
+/*设置没有更多数据的view*//*
+
     public void setNoMoreView(View noMoreView) {
         this.noMoreView = noMoreView;
     }
-    /*默认BottomView的情况下，设置正在加载的文字*/
+    */
+/*默认BottomView的情况下，设置正在加载的文字*//*
+
     public void setLoadViewText(String loadViewText) {
         this.loadViewText = loadViewText;
     }
-    /*默认BottomView的情况下，设置加载失败的文字*/
+    */
+/*默认BottomView的情况下，设置加载失败的文字*//*
+
     public void setErrorViewText(String errorViewText) {
         this.errorViewText = errorViewText;
     }
-    /*默认BottomView的情况下，设置没有更多数据的文字*/
+    */
+/*默认BottomView的情况下，设置没有更多数据的文字*//*
+
     public void setNoMoreViewText(String noMoreViewText) {
         this.noMoreViewText = noMoreViewText;
     }
@@ -211,3 +252,4 @@ public abstract class LoadMoreAdapter2<T> extends RecyclerView.Adapter<LoadMoreV
         return (int) (dipValue * scale + 0.5f);
     }
 }
+*/

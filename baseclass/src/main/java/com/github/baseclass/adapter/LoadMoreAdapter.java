@@ -3,7 +3,6 @@ package com.github.baseclass.adapter;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +36,9 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     /*** 是否隐藏暂无内容的提示*/
     private boolean isHiddenPromptView = false;
     private View loadView,errorView,noMoreView;
-    private String loadViewText,errorViewText,noMoreViewText;
+    private String loadViewText="正在加载更多...";
+    private String noMoreViewText="暂无更多";
+    private String errorViewText="加载失败,点击重试";
 
     protected List<T> mList;
     protected Context mContext;
@@ -88,18 +89,26 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     public void onBindViewHolder(LoadMoreViewHolder holder, int position) {
         if(position<=getItemCount()-2){
             bindData(holder, position, mList.get(position));
+            if(onLoadMoreListener!=null&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
+                getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        onLoadMoreListener.loadMore();
+                    }
+                });
+            }
         }else{
             if(onLoadMoreListener!=null){
                 holder.bottomView.setOnClickListener(null);
                 switch (holder.getItemViewType()){
-                    case load_more_view_type:
+                    /*case load_more_view_type:
                         getHandler().post(new Runnable() {
                             @Override
                             public void run() {
                                 onLoadMoreListener.loadMore();
                             }
                         });
-                        break;
+                        break;*/
                     case load_error_view_type:
                         holder.bottomView.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -148,7 +157,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     bottomView.addView(loadView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(loadViewText)?"正在加载更多...":loadViewText);
+                    textView.setText(loadViewText);
                     bottomView.addView(textView);
                 }
                 break;
@@ -157,7 +166,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     bottomView.addView(noMoreView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(noMoreViewText)?"暂无更多":noMoreViewText);
+                    textView.setText(noMoreViewText);
                     bottomView.addView(textView);
                 }
                 if(isHiddenPromptView){
@@ -169,7 +178,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     bottomView.addView(errorView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(errorViewText)?"加载失败,点击重试":errorViewText);
+                    textView.setText(errorViewText);
                     bottomView.addView(textView);
                 }
                 break;

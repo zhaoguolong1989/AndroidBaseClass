@@ -2,7 +2,6 @@ package com.github.baseclass.adapter;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -105,23 +104,19 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
         final LoadMoreLViewHolder viewHolder = getViewHolder(position, convertView,parent);
         int itemViewType = getItemViewType(position);
         if(itemViewType==normal_view){
-
-        }else{
-
-        }
-        if(position<=getCount()-2){
             convert(viewHolder, getItem(position));
+            if(onLoadMoreListener!=null&&hasMoreData&&!isLoadError&&position==getCount()-2){
+                onLoadMoreListener.loadMore();
+            }
         }else{
-//            LoadMoreLViewHolder bottomHolder=new LoadMoreLViewHolder();
-
             if(onLoadMoreListener!=null){
-//                viewHolder.bottomView=convertView.findViewById(R.i)
+                BottomView bottomView= (BottomView) setDefaultView(getItemViewType(position));
                 switch (getItemViewType(position)){
-                    case load_more_view_type:
+                    /*case load_more_view_type:
                         onLoadMoreListener.loadMore();
-                        break;
+                        break;*/
                     case load_error_view_type:
-                        viewHolder.bottomView.setOnClickListener(new View.OnClickListener() {
+                        bottomView.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 isLoadError=false;
@@ -132,6 +127,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
                         });
                         break;
                 }
+                return bottomView;
             }
         }
         return viewHolder.getConvertView();
@@ -158,7 +154,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
         return normal_view;
     }
     private View setDefaultView(int viewType) {
-        LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
+        BottomView bottomView = new BottomView(mContext);
         bottomView.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
         bottomView.setGravity(Gravity.CENTER);
 
@@ -172,7 +168,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
                     bottomView.addView(loadView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(loadViewText)?"正在加载更多...":loadViewText);
+                    textView.setText(loadViewText);
                     bottomView.addView(textView);
                 }
                 break;
@@ -181,7 +177,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
                     bottomView.addView(noMoreView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(noMoreViewText)?"暂无更多":noMoreViewText);
+                    textView.setText(noMoreViewText);
                     bottomView.addView(textView);
                 }
                 if(isHiddenPromptView){
@@ -193,7 +189,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
                     bottomView.addView(errorView);
                 }else{
                     layoutParams.height=dip2px(mContext,50);
-                    textView.setText(TextUtils.isEmpty(errorViewText)?"加载失败,点击重试":errorViewText);
+                    textView.setText(errorViewText);
                     bottomView.addView(textView);
                 }
                 break;
