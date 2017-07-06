@@ -265,6 +265,9 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     public void setHiddenPromptView(boolean hiddenPromptView) {
         setHiddenPromptView(hiddenPromptView,false);
     }
+    public void setHiddenPromptView() {
+        setHiddenPromptView(true,false);
+    }
     public void setHiddenPromptView(boolean hiddenPromptView,boolean isNotifyData){
         isHiddenPromptView = hiddenPromptView;
         if(isNotifyData){
