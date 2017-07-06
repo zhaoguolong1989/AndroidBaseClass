@@ -41,6 +41,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     private String noMoreViewText="暂无更多";
     private String errorViewText="加载失败,点击重试";
 
+    private boolean isEndLoad=true;
+
     protected List<T> mList;
     protected Context mContext;
     protected LayoutInflater mInflater;
@@ -90,10 +92,11 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     public void onBindViewHolder(final LoadMoreViewHolder holder, int position) {
         if(position<=getItemCount()-2){
             bindData(holder, position, mList.get(position));
-            if(onLoadMoreListener!=null&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
+            if(onLoadMoreListener!=null&&isEndLoad&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
                 getHandler().post(new Runnable() {
                     @Override
                     public void run() {
+                        isEndLoad=false;
                         onLoadMoreListener.loadMore();
                     }
                 });
@@ -121,6 +124,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                                 getHandler().post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        isEndLoad=false;
                                         onLoadMoreListener.loadMore();
                                     }
                                 });
@@ -205,6 +209,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
             hasMoreData = true;
         }
         this.mList = list;
+        isEndLoad=true;
         if (isNotifyData) {
             notifyDataSetChanged();
         }
@@ -222,6 +227,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
             hasMoreData = true;
             this.mList.addAll(list);
         }
+        isEndLoad=true;
         if (isNotifyData) {
             notifyDataSetChanged();
         }
@@ -265,12 +271,14 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         }
     }
     /*是否加载失败*/
-    public void setLoadError(boolean loadError) {
-        isLoadError = loadError;
+    public void setLoadError() {
+        isLoadError = true;
+        notifyDataSetChanged();
     }
     /*是否还有更多数据*/
-    public void setHasMoreData(boolean hasMoreData) {
-        this.hasMoreData = hasMoreData;
+    public void setNoMoreData() {
+        this.hasMoreData = false;
+        notifyDataSetChanged();
     }
     /*设置正在加载的view*/
     public void setLoadView(View loadView) {
