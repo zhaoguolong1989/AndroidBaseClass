@@ -87,7 +87,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     }
 
     @Override
-    public void onBindViewHolder(LoadMoreViewHolder holder, int position) {
+    public void onBindViewHolder(final LoadMoreViewHolder holder, int position) {
         if(position<=getItemCount()-2){
             bindData(holder, position, mList.get(position));
             if(onLoadMoreListener!=null&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
@@ -116,7 +116,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                             public void onClick(View v) {
                                 isLoadError=false;
                                 hasMoreData=true;
-                                notifyDataSetChanged();
+//                                notifyDataSetChanged();
+                                holder.bottomView.removeAllViews();
                                 getHandler().post(new Runnable() {
                                     @Override
                                     public void run() {
