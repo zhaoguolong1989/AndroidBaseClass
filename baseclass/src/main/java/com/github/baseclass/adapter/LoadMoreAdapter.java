@@ -203,6 +203,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         setList(list, false);
     }
     public void setList(List<T> list, boolean isNotifyData) {
+        this.isLoadError=false;
         if (list == null || list.size() == 0 || list.size() < pageSize) {
             hasMoreData = false;
         }else{
