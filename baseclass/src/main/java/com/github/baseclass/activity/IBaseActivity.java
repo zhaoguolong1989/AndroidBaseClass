@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.github.baseclass.BaseView;
 import com.github.baseclass.adapter.BaseRecyclerAdapter;
 import com.github.baseclass.adapter.CommonAdapter;
 import com.github.baseclass.view.Loading;
@@ -30,7 +31,7 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by Administrator on 2017/6/16.
  */
-public class IBaseActivity extends AppCompatActivity {
+public class IBaseActivity extends AppCompatActivity implements BaseView {
     protected Activity mContext;
     protected CommonAdapter mAdapter;
     protected BaseRecyclerAdapter mRcAdapter;
@@ -63,20 +64,20 @@ public class IBaseActivity extends AppCompatActivity {
         ToastUtils.showToast(this, toast, Toast.LENGTH_LONG);
     }
 
-    protected void STActivityForResult(Class clazz, int requestCode) {
+    public void STActivityForResult(Class clazz, int requestCode) {
         startActivityForResult(new Intent(this, clazz), requestCode);
     }
 
-    protected void STActivityForResult(Intent intent, Class clazz, int requestCode) {
+    public void STActivityForResult(Intent intent, Class clazz, int requestCode) {
         intent.setClass(this, clazz);
         startActivityForResult(intent, requestCode);
     }
 
-    protected void STActivity(Class clazz) {
+    public void STActivity(Class clazz) {
         startActivity(new Intent(this, clazz));
     }
 
-    protected void STActivity(Intent intent, Class clazz) {
+    public void STActivity(Intent intent, Class clazz) {
         intent.setClass(this, clazz);
         startActivity(intent);
 
@@ -110,10 +111,21 @@ public class IBaseActivity extends AppCompatActivity {
         Loading.showForExit(this, isExit);
     }
 
-    protected void showLoading() {
+    @Override
+    public void showMsg(String msg) {
+        ToastUtils.showToast(this,msg);
+    }
+    public void showLoading() {
         Loading.show(this);
     }
-
+    @Override
+    public void hideLoading() {
+        Loading.dismissLoading();
+    }
+    @Override
+    public void actFinish() {
+        this.finish();
+    }
     protected void dismissLoading() {
         Loading.dismissLoading();
     }
@@ -134,11 +146,12 @@ public class IBaseActivity extends AppCompatActivity {
     }
 
     /****************************************************************************/
-    protected <T> void getRxBusEvent(Class<T>event,MySubscriber subscriber){
+    public <T> void getRxBusEvent(Class<T>event,MySubscriber subscriber){
         Subscription subscription = RxBus.getInstance().getEvent(event, subscriber);
         addSubscription(subscription);
     }
-    protected <T> void RXStart(final IOCallBack<T> callBack) {
+
+    public <T> void RXStart(final IOCallBack<T> callBack) {
         Subscription subscribe = Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {
@@ -163,7 +176,7 @@ public class IBaseActivity extends AppCompatActivity {
         });
         addSubscription(subscribe);
     }
-    protected <T> void RXStart2(final IOCallBack<T> callBack) {
+    public <T> void RXStart2(final IOCallBack<T> callBack) {
         Subscription subscribe = Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {

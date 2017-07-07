@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
+import com.github.baseclass.BaseView;
 import com.github.baseclass.adapter.BaseRecyclerAdapter;
 import com.github.baseclass.adapter.CommonAdapter;
 import com.github.baseclass.view.Loading;
@@ -21,7 +22,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class IBaseFragment extends Fragment {
+public class IBaseFragment extends Fragment implements BaseView {
     protected Activity mContext;
     protected BaseRecyclerAdapter mRcAdapter;
     protected CommonAdapter mAdapter;
@@ -44,26 +45,42 @@ public class IBaseFragment extends Fragment {
         ToastUtils.showToast(mContext, toast, Toast.LENGTH_LONG);
     }
 
-    protected void STActivityForResult(Class clazz,int requestCode){
+    public void STActivityForResult(Class clazz,int requestCode){
         startActivityForResult(new Intent(getActivity(), clazz), requestCode);
     }
-    protected void STActivityForResult(Intent intent,Class clazz,int requestCode){
+    public void STActivityForResult(Intent intent,Class clazz,int requestCode){
         intent.setClass(getActivity(), clazz);
         startActivityForResult(intent, requestCode);
     }
-    protected void STActivity(Class clazz){
+    public void STActivity(Class clazz){
         startActivity(new Intent(getActivity(), clazz));
     }
-    protected void STActivity(Intent intent,Class clazz){
+    public void STActivity(Intent intent,Class clazz){
         intent.setClass(getActivity(), clazz);
         startActivity(intent);
     }
     protected void showLoading(boolean isExit){
         Loading.showForExit(getActivity(), isExit);
     }
-    protected void showLoading(){
+
+    @Override
+    public void showMsg(String msg) {
+        ToastUtils.showToast(getActivity(),msg);
+    }
+
+    public void showLoading(){
         Loading.show(getActivity());
     }
+
+    @Override
+    public void hideLoading() {
+        Loading.dismissLoading();
+    }
+
+    @Override
+    public void actFinish() {
+    }
+
     protected void dismissLoading(){
         Loading.dismissLoading();
     }
@@ -84,7 +101,7 @@ public class IBaseFragment extends Fragment {
     }
 
     /****************************************************************************/
-    protected <T> void RXStart(final IOCallBack<T> callBack) {
+    public <T> void RXStart(final IOCallBack<T> callBack) {
         Subscription subscribe = Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {
@@ -109,7 +126,7 @@ public class IBaseFragment extends Fragment {
                 });
         addSubscription(subscribe);
     }
-    protected <T> void RXStart2(final IOCallBack<T> callBack) {
+    public <T> void RXStart2(final IOCallBack<T> callBack) {
         Subscription subscribe = Observable.create(new Observable.OnSubscribe<T>() {
             @Override
             public void call(Subscriber<? super T> subscriber) {

@@ -16,6 +16,6 @@ public interface BaseView {
     void STActivityForResult(Intent intent, Class clazz, int requestCode);
     void STActivity(Class clazz);
     void STActivity(Intent intent, Class clazz);
-    void RXStart(IOCallBack callBack);
-    void RXStart2(IOCallBack callBack);
+    <T>  void RXStart(IOCallBack<T> callBack);
+    <T>  void RXStart2(IOCallBack<T> callBack);
 }
