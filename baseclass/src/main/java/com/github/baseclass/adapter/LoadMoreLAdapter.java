@@ -25,7 +25,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
     /*加载失败*/
     private final int load_error_view_type = 1002;
     /*回调方法,触发加载更多*/
-    private OnLoadMoreListener onLoadMoreListener;
+    public OnLoadMoreListener onLoadMoreListener;
     /***用于判断是否还有更多数据*/
     private int pageSize;
     /***是否还有更多数据,没有更多数据显示"暂无更多"*/
