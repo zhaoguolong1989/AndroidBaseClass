@@ -32,8 +32,10 @@ dependencies {
     compile 'com.pnikosis:materialish-progress:1.7'
 //    compile project(':androidutils')
     compile 'com.github:androidutils:1.0.1'
-    compile 'com.github:customview:1.0.9'
+    compile 'com.github:customview:1.1.0'
     compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.1.6'
 }
 /***************发布aar包的配置**********************/
 
