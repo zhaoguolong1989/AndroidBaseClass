@@ -1,7 +1,5 @@
 package com.github.baseclass.rx;
 
-import com.github.androidtools.rx.MySubscriber;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +15,7 @@ import rx.subjects.Subject;
  */
 
 public class RxBus {
-    private static volatile com.github.androidtools.rx.RxBus rxBusInstance;
+    private static volatile RxBus rxBusInstance;
     private final Subject<Object, Object> bus;
     // PublishSubject只会把在订阅发生的时间点之后来自原始Observable的数据发射给观察者
     public RxBus() {
@@ -25,11 +23,11 @@ public class RxBus {
         mStickyEventMap = new ConcurrentHashMap<>();
     }
     // 单例RxBus
-    public static com.github.androidtools.rx.RxBus getInstance() {
+    public static RxBus getInstance() {
         if (rxBusInstance == null) {
-            synchronized (com.github.androidtools.rx.RxBus.class) {
+            synchronized (RxBus.class) {
                 if (rxBusInstance == null) {
-                    rxBusInstance = new com.github.androidtools.rx.RxBus();
+                    rxBusInstance = new RxBus();
                 }
             }
         }
@@ -47,7 +45,7 @@ public class RxBus {
         return bus.ofType(eventType);
     }
     public  <T> Subscription getEvent(Class<T> eventType, MySubscriber sub){
-        return com.github.androidtools.rx.RxBus.getInstance().toObservable(eventType).subscribe(sub);
+        return RxBus.getInstance().toObservable(eventType).subscribe(sub);
     }
 
     /***************************************支持Sticky************************************************/

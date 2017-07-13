@@ -1,7 +1,5 @@
 package com.github.baseclass.rx;
 
-import com.github.androidtools.rx.MySubscriber;
-import com.github.androidtools.rx.RxBus;
 
 import rx.Subscription;
 

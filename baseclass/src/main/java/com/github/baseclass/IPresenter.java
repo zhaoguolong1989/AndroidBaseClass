@@ -3,9 +3,9 @@ package com.github.baseclass;
 import android.content.Context;
 import android.content.res.Resources;
 
+import com.github.baseclass.rx.IOCallBack;
 import com.github.baseclass.view.MyDialog;
 import com.github.baseclass.view.MyPopupwindow;
-import com.github.androidtools.rx.IOCallBack;
 
 import rx.Subscription;
 import rx.subscriptions.CompositeSubscription;

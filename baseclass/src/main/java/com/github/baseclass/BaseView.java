@@ -2,7 +2,8 @@ package com.github.baseclass;
 
 import android.content.Intent;
 
-import com.github.androidtools.rx.IOCallBack;
+import com.github.baseclass.rx.IOCallBack;
+
 
 /**
  * Created by Administrator on 2016/8/16.
