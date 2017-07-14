@@ -45,6 +45,8 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
 
     protected List<T> mList;
     protected Context mContext;
+    /**假数据测试设置list大小**/
+    protected int testListSize=0;
     protected LayoutInflater mInflater;
     private OnItemClickListener mClickListener;
     private OnItemLongClickListener mLongClickListener;
@@ -53,6 +55,10 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         this.mContext = mContext;
         mInflater=LayoutInflater.from(mContext);
         this.pageSize=pageSize;
+    }
+
+    public void setTestListSize(int testListSize) {
+        this.testListSize = testListSize;
     }
 
     abstract public int getItemLayoutId(int viewType);
@@ -91,7 +97,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     @Override
     public void onBindViewHolder(final LoadMoreViewHolder holder, int position) {
         if(position<=getItemCount()-2){
-            bindData(holder, position, mList.get(position));
+            bindData(holder, position, testListSize>0?null:mList.get(position));
             if(onLoadMoreListener!=null&&isEndLoad&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
                 getHandler().post(new Runnable() {
                     @Override
@@ -193,6 +199,9 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     }
     @Override
     public int getItemCount() {
+        if(testListSize>0){
+            return testListSize+1;
+        }
         if(onLoadMoreListener!=null){
             return mList==null?0:mList.size()+1;
         }else{
