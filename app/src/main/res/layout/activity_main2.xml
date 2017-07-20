@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    tools:context="com.github.test.Main2Activity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="android"
+        android:textSize="52sp"
+        android:layout_marginTop="140dp"
+        android:transitionName="b"
+        />
     <ImageView
-        android:id="@+id/a"
+        android:transitionName="a"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
         android:src="@drawable/qw"
         android:onClick="a"
         />
-<TextView
-    android:id="@+id/b"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="android"
-    android:textSize="22sp"
-    />
 </LinearLayout>

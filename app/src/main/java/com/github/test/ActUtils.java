@@ -1,4 +1,4 @@
-package com.github.baseclass.utils;
+package com.github.test;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
@@ -28,10 +28,10 @@ public class ActUtils {
 
 
     /*********************************带动画的跳转************************************View[]view,String[]transitionName*******/
-    public void STActivityForResult(Activity activity, Class clazz, int requestCode,Pair... pair ) {
+    public static void STActivityForResult(Activity activity, Class clazz, int requestCode,Pair... pair ) {
         STActivityForResult(activity,new Intent(),clazz,requestCode,pair);
     }
-    public void STActivityForResult(Activity activity,Intent intent, Class clazz, int requestCode,Pair... pair) {
+    public static void STActivityForResult(Activity activity,Intent intent, Class clazz, int requestCode,Pair... pair) {
         intent.setClass(activity, clazz);
         if (pair!=null&&pair.length>0&&android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptions options =ActivityOptions.makeSceneTransitionAnimation(activity,pair);
@@ -40,10 +40,10 @@ public class ActUtils {
             activity.startActivityForResult(intent,requestCode);
         }
     }
-    public void STActivity(Activity activity,Class clazz,Pair... pair) {//非空判断是否能进
+    public static void STActivity(Activity activity,Class clazz,Pair... pair) {//非空判断是否能进
         STActivity(activity,new Intent(),clazz,pair);
     }
-    public void STActivity(Activity activity,Intent intent, Class clazz,Pair... pair) {
+    public static void STActivity(Activity activity,Intent intent, Class clazz,Pair... pair) {
         intent.setClass(activity, clazz);
         //pair!=null&&pair.length>0&&
         if (pair!=null&&pair.length>0&&android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
