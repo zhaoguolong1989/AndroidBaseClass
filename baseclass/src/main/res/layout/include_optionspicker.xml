@@ -5,7 +5,7 @@
     android:background="@android:color/white"
     android:orientation="horizontal">
 
-    <com.haitaoit.peihuotong.view.pickerview.pic.WheelView
+    <com.github.baseclass.view.pickerview.pic.WheelView
         android:id="@+id/options1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -13,7 +13,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp" />
 
-    <com.haitaoit.peihuotong.view.pickerview.pic.WheelView
+    <com.github.baseclass.view.pickerview.pic.WheelView
         android:id="@+id/options2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
         android:paddingBottom="10dp"
         android:paddingTop="10dp" />
 
-    <com.haitaoit.peihuotong.view.pickerview.pic.WheelView
+    <com.github.baseclass.view.pickerview.pic.WheelView
         android:id="@+id/options3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
