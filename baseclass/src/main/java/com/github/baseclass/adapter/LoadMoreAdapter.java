@@ -41,6 +41,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     private String loadViewText="正在加载更多...";
     private String noMoreViewText="暂无更多";
     private String errorViewText="加载失败,点击重试";
+    private int bottomViewBackground=-1;
 
     private boolean isEndLoad=true;
 
@@ -151,7 +152,9 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
     }
     private View setDefaultView(int viewType) {
         LoadMoreViewHolder.BottomView bottomView = new LoadMoreViewHolder.BottomView(mContext);
-        bottomView.setBackgroundColor(mContext.getResources().getColor(android.R.color.white));
+        if(bottomViewBackground!=-1){
+            bottomView.setBackgroundColor(mContext.getResources().getColor(bottomViewBackground));
+        }
         bottomView.setGravity(Gravity.CENTER);
 
         ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
