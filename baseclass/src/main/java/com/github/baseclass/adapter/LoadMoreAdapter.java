@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.github.androidtools.inter.MyOnClickListener;
+
 import java.util.List;
 
 /**
@@ -110,7 +112,12 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     });
                 }
             }else{
-                holder.bottomView.setOnClickListener(null);
+                holder.bottomView.setOnClickListener(new MyOnClickListener() {
+                    @Override
+                    protected void onNoDoubleClick(View v) {
+
+                    }
+                });
                 switch (holder.getItemViewType()){
                     case load_error_view_type:
                         holder.bottomView.setOnClickListener(new View.OnClickListener() {
