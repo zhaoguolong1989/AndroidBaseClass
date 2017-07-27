@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.androidtools.inter.MyOnClickListener;
-
 import java.util.List;
 
 /**
@@ -99,7 +97,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
 
     @Override
     public void onBindViewHolder(final LoadMoreViewHolder holder, int position) {
-        if(onLoadMoreListener!=null){
+        if(onLoadMoreListener!=null&&testListSize<=0){
             if(position<=getItemCount()-2){
                 bindData(holder, position, testListSize>0?null:mList.get(position));
                 if(isEndLoad&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
@@ -112,12 +110,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
                     });
                 }
             }else{
-                holder.bottomView.setOnClickListener(new MyOnClickListener() {
-                    @Override
-                    protected void onNoDoubleClick(View v) {
-
-                    }
-                });
+                holder.bottomView.setOnClickListener(null);
                 switch (holder.getItemViewType()){
                     case load_error_view_type:
                         holder.bottomView.setOnClickListener(new View.OnClickListener() {
