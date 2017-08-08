@@ -39,6 +39,8 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
 
     private boolean isEndLoad=true;
 
+    /**假数据测试设置list大小**/
+    protected int testListSize=0;
     protected List<T> mList;
     protected Context mContext;
     protected LayoutInflater mInflater;
@@ -58,6 +60,10 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
 
         noMoreView= getFootView(no_more_view_type);
 
+    }
+
+    public void setTestListSize(int testListSize) {
+        this.testListSize = testListSize;
     }
     public void setList(List<T> list) {
         setList(list,false);
@@ -97,6 +103,9 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
 
     @Override
     public int getCount() {
+        if(testListSize>0){
+            return testListSize;
+        }
         return mList==null?0:mList.size();
     }
 
@@ -129,7 +138,11 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
         }
         ViewHolder holder = getViewHolder(position, convertView,parent);
 
-        convert(holder, getItem(position));
+        if(testListSize>0){
+            convert(holder,null);
+        }else{
+            convert(holder,getItem(position));
+        }
 
         return holder.getConvertView();
     }
