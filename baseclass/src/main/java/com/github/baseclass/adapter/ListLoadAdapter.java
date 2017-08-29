@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
+public abstract class ListLoadAdapter<T> extends BaseAdapter {
     /*正常view item*/
     private final int normal_view = 2000;
     /*显示加载更多*/
@@ -47,7 +47,7 @@ public abstract class LoadMoreLAdapter<T> extends BaseAdapter {
     protected final int mItemLayoutId;
     private ListView listView;
 
-    public LoadMoreLAdapter(Context context, int itemLayoutId,ListView listView, int pageSize ) {
+    public ListLoadAdapter(Context context, int itemLayoutId, ListView listView, int pageSize ) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(mContext);
         this.mItemLayoutId = itemLayoutId;
