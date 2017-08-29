@@ -47,19 +47,23 @@ public abstract class ListLoadAdapter<T> extends BaseAdapter {
     protected final int mItemLayoutId;
     private ListView listView;
 
-    public ListLoadAdapter(Context context, int itemLayoutId, ListView listView, int pageSize ) {
+    public ListLoadAdapter(Context context,int itemLayoutId) {
+        this.mContext = context;
+        this.mInflater = LayoutInflater.from(mContext);
+        this.mItemLayoutId = itemLayoutId;
+        loadView= getFootView(load_more_view_type);
+        errorView= getFootView(load_error_view_type);
+        noMoreView= getFootView(no_more_view_type);
+    }
+    public ListLoadAdapter(Context context,  ListView listView,int itemLayoutId, int pageSize ) {
         this.mContext = context;
         this.mInflater = LayoutInflater.from(mContext);
         this.mItemLayoutId = itemLayoutId;
         this.pageSize=pageSize;
         this.listView=listView;
-
         loadView= getFootView(load_more_view_type);
-
         errorView= getFootView(load_error_view_type);
-
         noMoreView= getFootView(no_more_view_type);
-
     }
 
     public void setTestListSize(int testListSize) {
@@ -154,11 +158,17 @@ public abstract class ListLoadAdapter<T> extends BaseAdapter {
     }
 
     private void addFooterView(View view){
+        if(this.listView==null){
+            return;
+        }
         if(getFooterViewsCount()==0){
             listView.addFooterView(view);
         }
     }
     private void removeFooterView(View view){
+        if(this.listView==null){
+            return;
+        }
         listView.removeFooterView(view);
     }
     private int getFooterViewsCount( ){
