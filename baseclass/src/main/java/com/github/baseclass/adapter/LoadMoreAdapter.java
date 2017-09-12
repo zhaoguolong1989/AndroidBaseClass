@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -226,6 +227,9 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         addList(list, false);
     }
     public void addList(List<T> list, boolean isNotifyData) {
+        if(this.mList==null){
+            this.mList=new ArrayList<>();
+        }
         if (list == null || list.size() == 0) {
             hasMoreData = false;
         } else if (list.size() < pageSize) {

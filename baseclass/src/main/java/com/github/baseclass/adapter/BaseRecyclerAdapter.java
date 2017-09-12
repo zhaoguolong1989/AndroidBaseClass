@@ -15,25 +15,25 @@ import java.util.List;
 
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<RecyclerViewHolder> {
 
-    protected  List<T> mData;
+    protected  List<T> mList;
     protected final Context mContext;
     protected LayoutInflater mInflater;
     private OnItemClickListener mClickListener;
     private OnItemLongClickListener mLongClickListener;
+    private int layoutId;
+    /**假数据测试设置list大小**/
+    protected int testListSize=0;
+    abstract public void bindData(RecyclerView.ViewHolder holder, int position, T item);
 
-    public BaseRecyclerAdapter(Context ctx, List<T> list) {
-        mData = (list != null) ? list : new ArrayList<T>();
+    public BaseRecyclerAdapter(Context ctx,int layoutId) {
         mContext = ctx;
         mInflater = LayoutInflater.from(ctx);
-    }
-    public BaseRecyclerAdapter(Context ctx) {
-        mContext = ctx;
-        mInflater = LayoutInflater.from(ctx);
+        this.layoutId=layoutId;
     }
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final RecyclerViewHolder holder = new RecyclerViewHolder(mContext,
-                mInflater.inflate(getItemLayoutId(viewType), parent, false));
+                mInflater.inflate(this.layoutId, parent, false));
         if (mClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -53,50 +53,71 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         }
         return holder;
     }
-
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        bindData(holder, position, mData.get(position));
+        bindData(holder, position, testListSize>0?null:mList.get(position));
+    }
+
+    public void setTestListSize(int testListSize) {
+        this.testListSize = testListSize;
     }
 
     @Override
     public int getItemCount() {
-        return mData==null?0:mData.size();
+        if(testListSize>0){
+            return testListSize;
+        }else{
+            return mList ==null?0: mList.size();
+        }
     }
 
-    /*public void add(int pos, T item) {
-        mData.add(pos, item);
-        notifyItemInserted(pos);
-    }*/
-    public void setData(List list) {
-        mData=list;
+    public void setList(List<T> list) {
+        setList(list, false);
     }
-    public void addData(List list) {
-        mData.addAll(list);
-        notifyDataSetChanged();
+    public void setList(List<T> list, boolean isNotifyData) {
+        if(list==null){
+            this.mList=new ArrayList<>();
+        }else{
+            this.mList = list;
+        }
+        if (isNotifyData) {
+            notifyDataSetChanged();
+        }
     }
-    public void delete(int pos) {
-        mData.remove(pos);
-        notifyItemRemoved(pos);
+    public void addList(List<T> list) {
+        addList(list, false);
     }
-
+    public void addList(List<T> list, boolean isNotifyData) {
+        if(list!=null){
+            this.mList.addAll(list);
+            if (isNotifyData) {
+                notifyDataSetChanged();
+            }
+        }
+    }
+    public List<T> getList() {
+        return mList;
+    }
+    public void delete(int position) {
+        mList.remove(position);
+        notifyItemRemoved(position);
+    }
+    public void deleteNotifyData(int position,boolean isNotifyData) {
+        mList.remove(position);
+        if(isNotifyData){
+            notifyDataSetChanged();
+        }
+    }
     public void setOnItemClickListener(OnItemClickListener listener) {
         mClickListener = listener;
     }
-
     public void setOnItemLongClickListener(OnItemLongClickListener listener) {
         mLongClickListener = listener;
     }
-
-    abstract public int getItemLayoutId(int viewType);
-
-    abstract public void bindData(RecyclerView.ViewHolder holder, int position, T item);
-
     public interface OnItemClickListener {
-        public void onItemClick(View itemView, int pos);
+        public void onItemClick(View itemView, int position);
     }
-
     public interface OnItemLongClickListener {
-        public void onItemLongClick(View itemView, int pos);
+        public void onItemLongClick(View itemView, int position);
     }
 }
