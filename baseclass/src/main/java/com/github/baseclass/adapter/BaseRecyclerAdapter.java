@@ -23,7 +23,7 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     private int layoutId;
     /**假数据测试设置list大小**/
     protected int testListSize=0;
-    abstract public void bindData(RecyclerView.ViewHolder holder, int position, T item);
+    abstract public void bindData(RecyclerViewHolder holder, int position, T item);
 
     public BaseRecyclerAdapter(Context ctx,int layoutId) {
         mContext = ctx;
