@@ -20,12 +20,9 @@ public class ExampleUnitTest {
 //        list2.add("2");
         if(list==null){
             list=new ArrayList<>();
-            list.addAll( new ArrayList<String>());
+            list.add("1");
+//            list.addAll( new ArrayList<String>());
         }
-        for (int i = 0; i <list.size(); i++) {
-            System.out.println(list.get(i));
-        }
-
     }
     @Test
     public void addition_isCorrect() throws Exception {

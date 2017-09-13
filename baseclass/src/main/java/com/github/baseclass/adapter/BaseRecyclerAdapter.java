@@ -55,7 +55,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
     }
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        bindData(holder, position, testListSize>0?null:mList.get(position));
+        if(mList==null||position>=mList.size()){
+            bindData(holder, position,null);
+        }else{
+            bindData(holder, position,testListSize>0?null:mList.get(position));
+        }
     }
 
     public void setTestListSize(int testListSize) {
