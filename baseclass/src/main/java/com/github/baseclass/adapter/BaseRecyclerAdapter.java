@@ -92,6 +92,9 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<Recycl
         addList(list, false);
     }
     public void addList(List<T> list, boolean isNotifyData) {
+        if(this.mList==null){
+            this.mList=new ArrayList<>();
+        }
         if(list!=null){
             this.mList.addAll(list);
             if (isNotifyData) {
