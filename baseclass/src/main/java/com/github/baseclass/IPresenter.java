@@ -19,7 +19,7 @@ public abstract class IPresenter<V extends BaseView>{
     private CompositeSubscription mCSubscription;
     protected MyPopupwindow mPopupwindow;
     protected MyDialog.Builder mDialog;
-    public IPresenter(Context context) {
+    public void setContext(Context context){
         mContext=context;
     }
     public void attach(V view){
