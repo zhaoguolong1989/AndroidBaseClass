@@ -2,6 +2,7 @@ package com.github.baseclass.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 
 public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreViewHolder> {
+    private NestedScrollView nsv;
     private int layoutId;
     Handler handler;
     /*正常view item*/
@@ -60,6 +62,31 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         this.pageSize=pageSize;
         this.layoutId=layoutId;
     }
+    public LoadMoreAdapter(Context mContext,int layoutId,int pageSize,NestedScrollView nestedScrollView) {
+        this.mContext = mContext;
+        mInflater=LayoutInflater.from(mContext);
+        this.pageSize=pageSize;
+        this.layoutId=layoutId;
+        this.nsv=nestedScrollView;
+        nsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                //当RecyclerView嵌套NestedScrollView时引发无限自动加载
+                //现在改为如何有NestedScrollView就判断是否滑动到底部，如果到底就加载数据
+                if(nsv.canScrollVertically(1)==false){
+                    if(isEndLoad&&hasMoreData&&!isLoadError){
+                        getHandler().post(new Runnable() {
+                            @Override
+                            public void run() {
+                                isEndLoad=false;
+                                onLoadMoreListener.loadMore();
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
 
     public void setTestListSize(int testListSize) {
         this.testListSize = testListSize;
@@ -101,7 +128,7 @@ public abstract class LoadMoreAdapter<T> extends RecyclerView.Adapter<LoadMoreVi
         if(onLoadMoreListener!=null&&testListSize<=0){
             if(position<=getItemCount()-2){
                 bindData(holder, position, testListSize>0?null:mList.get(position));
-                if(isEndLoad&&hasMoreData&&!isLoadError&&position==getItemCount()-2){
+                if(isEndLoad&&hasMoreData&&!isLoadError&&position==getItemCount()-2&&nsv==null){
                     getHandler().post(new Runnable() {
                         @Override
                         public void run() {

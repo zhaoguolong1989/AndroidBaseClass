@@ -21,7 +21,9 @@ public abstract class IPresenter<V extends BaseView>{
     protected MyDialog.Builder mDialog;
     public void setContext(Context context){
         mContext=context;
-    }
+        initContext(context);
+    };
+    public abstract void initContext(Context context);
     public void attach(V view){
         if(mView==null){
             mView=view;
